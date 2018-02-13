@@ -1,0 +1,7 @@
+---
+
+- name: Restart teleport
+  systemd:
+    name: teleport
+    state: restarted
+    enabled: yes

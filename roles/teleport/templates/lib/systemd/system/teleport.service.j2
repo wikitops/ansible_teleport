@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Teleport SSH Service
+After=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStart=/usr/local/bin/teleport start --config=/etc/teleport/teleport.yaml
+
+[Install]
+WantedBy=multi-user.target

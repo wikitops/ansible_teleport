@@ -1,0 +1,48 @@
+---
+
+- name: Download Teleport binaries
+  unarchive:
+    src: "{{ teleport_tar_uri }}"
+    dest: /tmp
+    remote_src: yes
+
+- name: Deploy Teleport binaries
+  shell: ./install
+  args:
+    chdir: /tmp/teleport
+
+- name: Create Teleport directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ teleport_conf_directory }}"
+
+- name: Configure Teleport
+  template:
+    src: "etc/teleport/teleport.yaml.j2"
+    dest: "/etc/teleport/teleport.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart teleport
+  tags: config
+
+- name: Deploy Systemd file
+  template:
+    src: "lib/systemd/system/teleport.service.j2"
+    dest: "/lib/systemd/system/teleport.service"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Clean downloads
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "/tmp/{{ teleport_tar_file }}"
+    - /tmp/teleport

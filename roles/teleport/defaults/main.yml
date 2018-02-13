@@ -1,0 +1,38 @@
+---
+
+teleport_version: 2.4.1
+teleport_tar_file: "teleport-v{{ teleport_version }}-linux-amd64-bin.tar.gz"
+teleport_tar_uri: "https://github.com/gravitational/teleport/releases/download/v{{ teleport_version }}/{{ teleport_tar_file }}"
+
+teleport_conf_directory: /etc/teleport
+
+teleport_nodename: "{{ ansible_fqdn }}"
+teleport_data_dir: "/var/lib/teleport"
+teleport_advertise_ip: "{{ inventory_hostname }}"
+teleport_log_output: syslog
+teleport_log_severity: ERROR
+
+# auth service
+teleport_auth_cluster_name: main
+teleport_auth_second_factor: "off"
+teleport_auth_listen_addr: 0.0.0.0
+teleport_auth_tockens_node: coahvszoufcvazoevrfciaevzrvhfgvaodq
+teleport_auth_tockens_proxy: zevbcoazvoevcozavecvzovecouyvzuevcz
+teleport_auth_tockens_auth: ljibdcpibapzevbcazbecphbazpebcpazbe
+teleport_auth_tockens_auth_proxy_node: cijshbdcjbzedbvzakijevhpiubaziebvi
+teleport_auth_session_recording: node
+
+# ssh service
+teleport_ssh_listen_addr: 0.0.0.0
+teleport_ssh_labels:
+  role: master
+  type: postgres
+  environment: production
+  domain: it
+
+# proxy service
+teleport_proxy_listen_addr: 0.0.0.0
+teleport_proxy_tunnel_listen_addr: 0.0.0.0
+teleport_proxy_web_listen_addr: 0.0.0.0
+teleport_proxy_https_key_file: ''
+teleport_proxy_https_cert_file: ''

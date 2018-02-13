@@ -1,0 +1,36 @@
+---
+
+- hosts: master
+  remote_user: vagrant
+  become: yes
+  vars:
+    teleport_ssh_labels:
+      role: master
+      type: postgres
+      environment: staging
+      domain: it
+  roles:
+    - teleport
+
+- hosts: node
+  remote_user: vagrant
+  become: yes
+  vars:
+    teleport_ssh_labels:
+      role: node
+      type: nginx
+      environment: staging
+      domain: web
+  roles:
+    - teleport
+
+- hosts: master
+  remote_user: vagrant
+  become: yes
+  tasks:
+    - name: Create Teleport user
+      shell: tctl users add $USER
+      register: teleport_url
+    - debug:
+        msg: "{{ teleport_url.stdout_lines }}"
+  tags: create_user
